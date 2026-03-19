@@ -1,0 +1,6 @@
+{
+    "name": "lab-xv6 dev container",
+    "build": {
+        "dockerfile": "Dockerfile"
+    }
+}
