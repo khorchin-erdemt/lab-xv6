@@ -15,6 +15,7 @@
 #include "sleeplock.h"
 #include "file.h"
 #include "fcntl.h"
+#include "syscall.h"
 
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.
@@ -314,6 +315,11 @@ sys_open(void)
   if((n = argstr(0, path, MAXPATH)) < 0)
     return -1;
 
+  struct proc *p = myproc();
+  if((p->inttype & (1 << SYS_open)) != 0 &&
+      (strcmp(p->intpath, "-") == 0 || strcmp(p->intpath, path) != 0))
+    return -1;
+
   begin_op();
 
   if(omode & O_CREATE){
@@ -460,6 +466,11 @@ sys_exec(void)
     if(fetchstr(uarg, argv[i], PGSIZE) < 0)
       goto bad;
   }
+
+  struct proc *p = myproc();
+  if((p->inttype & (1 << SYS_exec)) != 0 &&
+      (strcmp(p->intpath, "-") == 0 || strcmp(p->intpath, path) != 0))
+    return -1;
 
   int ret = kexec(path, argv);
 

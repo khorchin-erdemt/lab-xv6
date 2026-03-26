@@ -105,3 +105,17 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_interpose(void)
+{
+  int inttype;
+  char intpath[MAXPATH];
+
+  argint(0, &inttype);
+  argstr(1, intpath, MAXPATH);
+  struct proc *p = myproc();
+  p->inttype = inttype;
+  strncpy(p->intpath, intpath, MAXPATH);
+  return 1;
+}

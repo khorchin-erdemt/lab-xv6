@@ -295,6 +295,9 @@ kfork(void)
   np->parent = p;
   release(&wait_lock);
 
+  np->inttype= p->inttype;
+  strncpy(np->intpath, p->intpath, MAXPATH);
+
   acquire(&np->lock);
   np->state = RUNNABLE;
   release(&np->lock);

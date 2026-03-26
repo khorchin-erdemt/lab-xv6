@@ -21,9 +21,10 @@ int mkdir(const char*);
 int chdir(const char*);
 int dup(int);
 int getpid(void);
-char* sys_sbrk(int,int);
+char* sys_sbrk(int, int);
 int pause(int);
 int uptime(void);
+int interpose(int, const char*);
 
 // ulib.c
 int stat(const char*, struct stat*);
